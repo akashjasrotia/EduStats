@@ -5,6 +5,7 @@ export default function () {
     <div>
         <NavLink to="/signup">Signup</NavLink>
         <NavLink to="/login">Login</NavLink>
+        <NavLink to="/Aboutus">Aboutus</NavLink>
     </div>
   )
 }
