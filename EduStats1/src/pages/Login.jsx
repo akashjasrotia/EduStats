@@ -29,7 +29,7 @@ export default function Login() {
           password: "",
         });
         setTimeout(() => {
-          navigate('/');
+          navigate('/home');
         },2000);
       }
       else {
