@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const signupRouter = require("./routes/signup.js");
 const loginRouter = require("./routes/login.js");
+const homeRouter = require('./routes/home.js');
 dotenv.config();
 connectDB();
 const app = express();
@@ -15,10 +16,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-// console.log("Signup router type:", typeof signupRouter);
-// console.log("Login router type:", typeof loginRouter);
 
 app.use("/api/signup", signupRouter);
 app.use("/api/login", loginRouter);
+app.use('/api/home', homeRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
