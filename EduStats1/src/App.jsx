@@ -4,6 +4,8 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import { Toaster } from "react-hot-toast"
 import ProtectedRoute from "./components/ProtectedRoute"
+import AboutUs from "./pages/About"
+import Navbar from "./components/Navbar"
 export default function App() {
   return(
     <BrowserRouter>
@@ -16,12 +18,14 @@ export default function App() {
         },
       }}
       />
+      <Navbar/>
       <Routes>
         <Route path="/home" element={
           <ProtectedRoute>
             <Home />
           </ProtectedRoute>
         } />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

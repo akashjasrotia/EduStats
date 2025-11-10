@@ -3,4 +3,6 @@
 @theme{
   --color-primary:#09443D;
   --color-secondary:#ffffff;
+  --color-darkPrimary:#ffffff;
+  --color-darkSecondary:#05060F;
 }

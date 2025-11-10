@@ -1,45 +1,45 @@
-import React from 'react'
-import { useEffect } from 'react';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-export default function ProtectedRoute({children}) {
-    const [auth, setAuth] = useState(false);
-    const [responseData, setResponseData] = useState(null);
-    const navigate = useNavigate();
-    const fetchAuthStatus = async () => {
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+export default function ProtectedRoute({ children }) {
+  const [auth, setAuth] = useState(null);
+  const navigate = useNavigate();
+
+  const fetchAuthStatus = async () => {
     try {
-        const res = await fetch("http://localhost:3000/api/home", {
+      const res = await fetch("http://localhost:3000/api/home", {
         method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
         credentials: "include",
-        });
-        const data = await res.json();
-        setResponseData(data);
-        if (res.ok) {
-            setAuth(true);
-        }
+      });
+
+      if (res.status === 200) {
+        setAuth(true);
+      } else {
+        setAuth(false);
+      }
     } catch (error) {
-        console.error("Error fetching auth status:", error);
+      console.error("Error checking auth:", error);
+      setAuth(false);
     }
-    useEffect(()=>{
-        fetchAuthStatus();
-    }, []);
-    useEffect(()=>{
-        if(!auth) {
-            toast.error("Please login first");
-            setTimeout(() => {
-                navigate("/login");
-            }, 1500);
-        }
-    }, [auth]);
   };
-  useEffect(()=>{
-    toast.success(responseData?.message);
-  },[responseData]);
-  return (
-    children
-  )
+
+  useEffect(() => {
+    fetchAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    if (auth === false) {
+      toast.error("Please login first");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
+    }
+  }, [auth]);
+
+  if (auth === null) {
+    return <div>Loading...</div>;
+  }
+
+  return children;
 }
