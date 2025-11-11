@@ -11,8 +11,8 @@ export default function Home() {
         min-h-screen flex flex-col items-center transition
         ${
           darkMode
-            ? "bg-gradient-to-br from-darkPrimary/20 to-darkSecondary/20 text-gray-100"
-            : "bg-gradient-to-br from-primary/10 to-secondary/10 text-gray-900"
+            ? "bg-linear-to-br from-darkPrimary/20 to-darkSecondary/20 text-gray-100"
+            : "bg-linear-to-br from-primary/10 to-secondary/10 text-gray-900"
         }
       `}
     >

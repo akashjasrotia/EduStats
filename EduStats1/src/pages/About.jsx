@@ -44,7 +44,7 @@ function ProfileCard({ name, role }) {
 
 export default function AboutUs() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-primary/10 to-secondary/10 py-16 px-6">
+    <section className="min-h-screen bg-linear-to-br from-primary/10 to-secondary/10 py-16 px-6">
       <div className="max-w-5xl mx-auto text-center">
         {/* Header */}
         <h1 className="text-4xl font-extrabold text-primary">Meet the Team</h1>
