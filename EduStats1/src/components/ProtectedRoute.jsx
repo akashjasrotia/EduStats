@@ -33,7 +33,7 @@ export default function ProtectedRoute({ children }) {
       toast.error("Please login first");
       setTimeout(() => {
         navigate("/login");
-      }, 1200);
+      }, 100);
     }
   }, [auth]);
 

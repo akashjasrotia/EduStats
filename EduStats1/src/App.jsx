@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
+import ProtectedRoute2 from "./components/ProtectedRoute2";
 
 export default function App() {
   return (
@@ -21,8 +22,16 @@ export default function App() {
             </ProtectedRoute>
           }/>
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={
+            <ProtectedRoute2>
+              <Login/>
+            </ProtectedRoute2>
+          } />
+          <Route path="/signup" element={
+            <ProtectedRoute2>
+              <Signup/>
+            </ProtectedRoute2>
+          } />
         </Route>
       </Routes>
     </BrowserRouter>
