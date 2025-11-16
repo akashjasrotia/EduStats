@@ -1,10 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
+*{
+  font-family: Raleway;
+}
+::selection{
+  background-color: #6D54B5;
+  color: #ffffff;
+}
 @theme{
+  --font-Raleway:Raleway,"sans-serif";
+  --font-Kanit:Kanit,"sans-serif";
   --color-primary:#0D9AB8;
   --color-secondary:#bae1e8;
-  --color-text:#000000;
-  --color-bg:#ffffff;
-  --color-darkText:#ffffff;
-  --color-darkBg:#111111;
   --color-mainBlue:#6D54B5;
+}
+::-webkit-scrollbar{
+  display:none;
 }
