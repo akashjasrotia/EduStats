@@ -5,69 +5,97 @@ export default function Landing() {
   const isLoggedIn = useIsLoggedIn((state) => state.isLoggedIn);
 
   return (
-    <div className="px-6 relative min-h-screen">
+    <div className="min-h-screen font-[Poppins] bg-linear-to-br from-[#F7F8FC] to-[#EEF1F7]">
 
-      <div className="w-full h-[10vh] px-8 flex items-center justify-between">
-
-        <div className="text-2xl font-bold font-['Poppins']">
+      <div className="
+        w-full h-[12vh] px-10 flex items-center justify-between
+        backdrop-blur-xl bg-white/60 shadow-md sticky top-0 z-40
+        border-b border-white/40
+      ">
+        <div className="text-2xl font-bold tracking-tight text-mainBlue">
           EduStats
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-          <NavLink to="/home" className="hover:text-primary transition">Home</NavLink>
-          <NavLink to="/visualizations" className="hover:text-primary transition">Visualizations</NavLink>
-          <NavLink to="/about" className="hover:text-primary transition">About Us</NavLink>
-          <NavLink to="/contact" className="hover:text-primary transition">Contact</NavLink>
+        <div className="hidden md:flex items-center gap-10 text-gray-700 text-[15px] font-medium">
+          <NavLink to="/home" className="hover:text-mainBlue transition">Home</NavLink>
+          <NavLink to="/visualizations" className="hover:text-mainBlue transition">Visualizations</NavLink>
+          <NavLink to="/about" className="hover:text-mainBlue transition">About</NavLink>
+          <NavLink to="/contact" className="hover:text-mainBlue transition">Contact</NavLink>
         </div>
 
+        {/* Auth Button */}
         {isLoggedIn ? (
           <NavLink
             to="/profile"
-            className="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition"
+            className="
+              bg-mainBlue text-white px-6 py-2.5 rounded-xl 
+              shadow-sm hover:bg-mainBlue/90 transition font-medium
+            "
           >
             Profile
           </NavLink>
         ) : (
           <NavLink
             to="/signup"
-            className="bg-primary text-white px-5 py-2 rounded-lg hover:bg-primary/90 transition"
+            className="
+              bg-mainBlue text-white px-6 py-2.5 rounded-xl 
+              shadow-sm hover:bg-mainBlue/90 transition font-medium
+            "
           >
             Login / Signup
           </NavLink>
         )}
       </div>
-      <div
-        className="
-          w-full h-[90vh] flex justify-center items-center 
-          bg-linear-to-br from-primary/30 to-secondary/40 
-          rounded-3xl mt-4
+
+
+
+      {/* HERO SECTION – Premium Modern UI */}
+      <section
+        className="-translate-y-[14%]
+          w-full h-[88vh] flex justify-center items-center 
+          px-6 mt-6
         "
       >
-        <div className="flex flex-col justify-center items-center text-center px-4">
-
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Smarter decisions, stronger education. <br />
-            <span className="text-gray-500 text-4xl md:text-6xl">
-              all in one place
-            </span>
+        <div className="
+          flex flex-col items-center text-center
+        ">
+          <h1 className="
+            text-5xl md:text-8xl font-bold leading-[1.2] text-gray-900
+          ">
+            Transform the way you understand{" "}
+            <span className="text-mainBlue">education data</span>.
           </h1>
 
-          <p className="text-lg md:text-xl mt-4">
-            Visualizing educational data efficiently.
+          <p className="text-lg md:text-xl mt-6 text-gray-600">
+            Clean, fast, and intelligent visualizations—built for students, teachers,
+            and institutions that want clarity at a glance.
           </p>
 
-          <a
-            href="/home"
-            className="
-              mt-8 py-4 px-8 bg-primary text-white rounded-xl
-              hover:bg-primary/95 active:translate-y-1
-              transition-all duration-300 cursor-pointer
-            "
-          >
-            Get Started
-          </a>
+          <div className="flex gap-4 mt-10">
+            <a
+              href="/home"
+              className="
+                py-3.5 px-8 bg-mainBlue text-white rounded-xl
+                shadow-md hover:bg-mainBlue/90 transition text-lg font-medium
+              "
+            >
+              Get Started
+            </a>
+
+            <a
+              href="/contact"
+              className="
+                py-3.5 px-8 bg-white text-mainBlue rounded-xl
+                border border-mainBlue/30 shadow hover:shadow-md transition
+                text-lg font-medium
+              "
+            >
+              Contact Us
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
+
     </div>
   );
 }

@@ -8,32 +8,56 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute2 from "./components/ProtectedRoute2";
+import Contact from "./pages/Contact";
+import ManualEntry from "./pages/TrackManually";
+import ResultsPage from "./pages/Result";
 
 export default function App() {
   return (
-    <BrowserRouter>
-    <Toaster position="top-right"/>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route element={<MainLayout />}>
-          <Route path="/home" element={
-            <ProtectedRoute>
-              <Home/>
-            </ProtectedRoute>
-          }/>
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={
-            <ProtectedRoute2>
-              <Login/>
-            </ProtectedRoute2>
-          } />
-          <Route path="/signup" element={
-            <ProtectedRoute2>
-              <Signup/>
-            </ProtectedRoute2>
-          } />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <div className="bg-slate-950">
+      <BrowserRouter>
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route element={<MainLayout />}>
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact/>}/>
+            <Route
+            path="/home/manual"
+            element={
+              <ProtectedRoute>
+                <ManualEntry />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/results/:vizName" element={<ResultsPage/>} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute2>
+                  <Login />
+                </ProtectedRoute2>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <ProtectedRoute2>
+                  <Signup />
+                </ProtectedRoute2>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
