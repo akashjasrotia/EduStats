@@ -4,8 +4,11 @@
 *{
   font-family: Raleway;
 }
+body{
+  background-color: #020617;
+}
 ::selection{
-  background-color: #6D54B5;
+  background-color: #000000;
   color: #ffffff;
 }
 @theme{
