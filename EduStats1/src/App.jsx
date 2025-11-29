@@ -38,7 +38,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/results/:vizName" element={<ResultsPage/>} />
+          <Route path="/results" element={<ResultsPage />} />
             <Route
               path="/login"
               element={
