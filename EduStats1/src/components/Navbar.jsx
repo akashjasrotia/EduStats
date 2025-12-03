@@ -14,9 +14,12 @@ import {
   UserPlus,
   Moon,
   Sun,
+  Award,
 } from "lucide-react";
+import { useResultStore } from "../stores/ResultStore";
 
 export default function Sidebar() {
+  const clearResults = useResultStore((s) => s.clearResults);
   const darkMode = useThemeStore((s) => s.darkMode);
   const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
 
@@ -37,6 +40,7 @@ export default function Sidebar() {
 
       if (res.ok) {
         logout();
+        clearResults();
         toast.success("Logged out successfully!");
         setTimeout(() => navigate("/login"), 1000);
       } else {
@@ -70,6 +74,7 @@ export default function Sidebar() {
       : []),
     { to: "/about", label: "About", icon: <Info size={20} /> },
     { to: "/contact", label: "Contact", icon: <Phone size={20} /> },
+    { to: "/results", label: "Saved Results", icon: <Award size={20} /> },
   ];
 
   return (
@@ -136,7 +141,7 @@ export default function Sidebar() {
         ) : (
           <button
             onClick={handleLogout}
-            className="flex items-center p-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors duration-200"
+            className="flex items-center p-3 rounded-lg bg-red-700 text-white hover:bg-red-700 transition-colors duration-200"
           >
             <LogOut size={20} />
             <span className={textClass}>Logout</span>

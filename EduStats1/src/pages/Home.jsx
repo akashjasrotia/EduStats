@@ -2,9 +2,9 @@ import { useThemeStore } from "../stores/ThemeStore";
 import { BarChart3, UploadCloud, Eye, Loader2 } from "lucide-react";
 import { useIsLoggedIn } from "../stores/IsLoggedInStore";
 import { useEffect, useState } from "react";
-import FileUploadBox from "../components/UploadFile";
 import VerticalCarousel from "../components/Carousel";
 import { useNavigate } from "react-router-dom";
+import ExcelUpload from "../components/UploadFile";
 export default function Home() {
   const navigate = useNavigate();
   const user = useIsLoggedIn((s) => s.user);
@@ -44,9 +44,9 @@ export default function Home() {
 
   return (
     <div
-      className={`pt-30 
+      className={` 
         ml-12 font-Kanit min-h-screen px-6 py-10 flex flex-col items-center
-        transition-colors duration-300
+        transition-colors duration-500
         ${darkMode ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"}
       `}
     >
@@ -92,7 +92,7 @@ export default function Home() {
           </div>
 
           {/* Upload File */}
-          <FileUploadBox darkMode={darkMode} />
+          <ExcelUpload darkMode={darkMode} />
 
           {/* View Insights */}
           <div
