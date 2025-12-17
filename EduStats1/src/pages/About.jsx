@@ -1,24 +1,30 @@
 import { motion } from "framer-motion";
 import { useThemeStore } from "../stores/ThemeStore";
-import { BarChart3, UploadCloud, Eye, ShieldCheck, LineChart } from "lucide-react";
+import {
+  BarChart3,
+  UploadCloud,
+  Eye,
+  LineChart,
+} from "lucide-react";
 
 export default function About() {
   const darkMode = useThemeStore((s) => s.darkMode);
 
-  const text = darkMode ? "text-gray-200" : "text-gray-800";
-  const subText = darkMode ? "text-gray-400" : "text-gray-600";
-  const bg = darkMode ? "bg-slate-950" : "bg-gray-50";
-
   return (
-    <div className={`${bg} min-h-screen px-6 lg:px-24 py-16 transition-all`}>
-      
-      {/* HERO SECTION */}
-      <section className="text-center max-w-3xl mx-auto mb-20">
-        <motion.h1 
+    <div
+      className={`min-h-screen px-6 lg:px-24 py-20 transition-colors ${
+        darkMode ? "bg-zinc-950" : "bg-gray-50"
+      }`}
+    >
+      {/* HERO */}
+      <section className="text-center max-w-4xl mx-auto mb-24">
+        <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className={`text-4xl md:text-6xl font-bold mb-4 ${text}`}
+          className={`text-4xl md:text-6xl font-light tracking-tight mb-6 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
         >
           Empowering Education Through Data
         </motion.h1>
@@ -27,144 +33,199 @@ export default function About() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className={`text-lg ${subText}`}
+          className={`text-lg ${
+            darkMode ? "text-zinc-500" : "text-gray-600"
+          }`}
         >
-          EduStats transforms raw academic data into beautiful, meaningful, and easy-to-understand insights.
+          EduStats transforms raw academic data into clean,
+          meaningful and easy-to-understand insights.
         </motion.p>
       </section>
 
-      {/* MISSION SECTION */}
-      <section className="max-w-4xl mx-auto text-center mb-20">
+      {/* MISSION */}
+      <section className="max-w-4xl mx-auto mb-24">
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className={`rounded-2xl p-10 shadow-xl ${darkMode ? "bg-gray-900" : "bg-white"}`}
+          className={`rounded-2xl p-10 ${
+            darkMode
+              ? "bg-zinc-900"
+              : "bg-white shadow-sm"
+          }`}
         >
-          <h2 className={`text-2xl font-semibold mb-4 ${text}`}>Our Mission</h2>
-          <p className={`${subText} leading-relaxed`}>
-            We’re building a simplified platform where students and educators 
-            can visualize performance, track growth, upload data, and convert it into powerful insights —
-            all without the complexity of traditional analytics tools.
+          <h2
+            className={`text-2xl font-medium mb-4 ${
+              darkMode ? "text-white" : "text-black"
+            }`}
+          >
+            Our Mission
+          </h2>
+          <p
+            className={`leading-relaxed ${
+              darkMode ? "text-zinc-500" : "text-gray-600"
+            }`}
+          >
+            We’re building a simplified platform where students
+            and educators can visualize performance, track
+            growth, upload data and convert it into insights —
+            without the complexity of traditional analytics tools.
           </p>
         </motion.div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section className="max-w-6xl mx-auto mb-20">
-        <h2 className={`text-3xl font-semibold text-center mb-12 ${text}`}>
-          What Makes EduStats Different?
+      {/* FEATURES */}
+      <section className="max-w-7xl mx-auto mb-28">
+        <h2
+          className={`text-3xl font-light text-center mb-14 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
+          What Makes EduStats Different
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className={`p-8 rounded-2xl shadow-lg text-center ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <BarChart3 className="mx-auto text-mainBlue" size={42} />
-            <h3 className={`mt-4 text-xl font-semibold ${text}`}>Data Visualization</h3>
-            <p className={`${subText} mt-2`}>
-              Transform your numbers into clean charts and dashboards instantly.
-            </p>
-          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              icon: BarChart3,
+              title: "Data Visualization",
+              desc: "Turn raw numbers into clean charts and dashboards instantly.",
+            },
+            {
+              icon: UploadCloud,
+              title: "Easy Uploads",
+              desc: "Upload Excel or CSV files and get insights in seconds.",
+            },
+            {
+              icon: Eye,
+              title: "Instant Insights",
+              desc: "Understand trends, performance and growth at a glance.",
+            },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -4 }}
+              className={`group relative overflow-hidden rounded-2xl p-8 transition ${
+                darkMode
+                  ? "bg-zinc-900 hover:bg-zinc-900/80"
+                  : "bg-white hover:bg-gray-50 shadow-sm hover:shadow-md"
+              }`}
+            >
+              <div
+                className={`absolute top-0 right-0 w-28 h-28 rounded-full blur-3xl opacity-20 ${
+                  darkMode ? "bg-indigo-500" : "bg-indigo-400"
+                }`}
+              ></div>
 
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className={`p-8 rounded-2xl shadow-lg text-center ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <UploadCloud className="mx-auto text-mainBlue" size={42} />
-            <h3 className={`mt-4 text-xl font-semibold ${text}`}>Upload Anything</h3>
-            <p className={`${subText} mt-2`}>
-              Import CSV, Excel, or text data — we turn it into insights.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className={`p-8 rounded-2xl shadow-lg text-center ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <Eye className="mx-auto text-mainBlue" size={42} />
-            <h3 className={`mt-4 text-xl font-semibold ${text}`}>Insights at a Glance</h3>
-            <p className={`${subText} mt-2`}>
-              Understand trends, performance and improvements with ease.
-            </p>
-          </motion.div>
-
+              <div className="relative text-center">
+                <item.icon
+                  className={`mx-auto mb-4 w-10 h-10 ${
+                    darkMode
+                      ? "text-indigo-400"
+                      : "text-indigo-600"
+                  }`}
+                />
+                <h3
+                  className={`text-xl font-medium mb-2 ${
+                    darkMode ? "text-white" : "text-black"
+                  }`}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className={`text-sm ${
+                    darkMode ? "text-zinc-500" : "text-gray-600"
+                  }`}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* STORY SECTION */}
-      <section className="max-w-5xl mx-auto mb-20">
-        <h2 className={`text-3xl font-semibold text-center mb-12 ${text}`}>
+      {/* JOURNEY */}
+      <section className="max-w-5xl mx-auto mb-28">
+        <h2
+          className={`text-3xl font-light text-center mb-14 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
           Our Journey
         </h2>
 
-        <div className="space-y-8">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className={`p-6 rounded-xl shadow ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <h4 className={`text-xl font-semibold ${text}`}>📌 The Idea</h4>
-            <p className={`${subText} mt-1`}>
-              EduStats began as a simple concept to help students visualize progress without complicated tools.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className={`p-6 rounded-xl shadow ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <h4 className={`text-xl font-semibold ${text}`}>⚙ Building the Platform</h4>
-            <p className={`${subText} mt-1`}>
-              We crafted a modern UI, secure login system, dark mode, dashboards, and upload tools.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className={`p-6 rounded-xl shadow ${
-              darkMode ? "bg-gray-900" : "bg-white"
-            }`}
-          >
-            <h4 className={`text-xl font-semibold ${text}`}>🚀 The Future</h4>
-            <p className={`${subText} mt-1`}>
-              AI insights, prediction models, trend forecasting — coming soon.
-            </p>
-          </motion.div>
+        <div className="space-y-6">
+          {[
+            {
+              title: "The Idea",
+              desc: "A simple way for students to visualize progress without complex tools.",
+            },
+            {
+              title: "Building the Platform",
+              desc: "Modern UI, dashboards, dark mode and secure data handling.",
+            },
+            {
+              title: "The Future",
+              desc: "AI insights, predictions and intelligent trend analysis.",
+            },
+          ].map((step, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: i % 2 ? 20 : -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className={`rounded-xl p-6 ${
+                darkMode
+                  ? "bg-zinc-900"
+                  : "bg-white shadow-sm"
+              }`}
+            >
+              <h4
+                className={`text-lg font-medium ${
+                  darkMode ? "text-white" : "text-black"
+                }`}
+              >
+                {step.title}
+              </h4>
+              <p
+                className={`mt-1 ${
+                  darkMode ? "text-zinc-500" : "text-gray-600"
+                }`}
+              >
+                {step.desc}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="text-center max-w-3xl mx-auto mt-10">
-        <h2 className={`text-2xl font-semibold mb-4 ${text}`}>
+      {/* CTA */}
+      <section className="text-center max-w-3xl mx-auto">
+        <h2
+          className={`text-2xl font-medium mb-4 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
           Ready to Explore Your Data?
         </h2>
-        <p className={`${subText} mb-6`}>
-          Start your journey with beautiful dashboards and clean insights.
+        <p
+          className={`mb-8 ${
+            darkMode ? "text-zinc-500" : "text-gray-600"
+          }`}
+        >
+          Start your journey with clean dashboards and
+          meaningful insights.
         </p>
 
         <a
           href="/home"
-          className="
-            inline-block bg-mainBlue text-white px-8 py-3 rounded-xl 
-            hover:bg-mainBlue/90 transition-all shadow-md
-          "
+          className={`group inline-flex items-center gap-2 px-8 py-3 rounded-xl font-medium transition ${
+            darkMode
+              ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
+              : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+          }`}
         >
-          Get Started →
+          Get Started <span className="group-hover:-rotate-45 transition-all duration-500 text-indigo-400">→</span>
         </a>
       </section>
     </div>
