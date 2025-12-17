@@ -1,26 +1,46 @@
-import { useResultStore } from "../stores/ResultStore";
 import { useThemeStore } from "../stores/ThemeStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { X } from "lucide-react";
 import TopThreeLeaderboard from "../components/Leaderboard";
-import  {motion} from 'framer-motion';
 import ChartsSection from "../components/ChartSection";
-import AiOverview from "../components/AIOverview";
 import StatsSummary from "../components/StatsSummary";
+import AiOverview from "../components/AIOverview";
+import { useIsLoggedIn } from "../stores/IsLoggedInStore";
+import { motion } from "framer-motion";
 
-export default function ResultsPage() {
-  const results = useResultStore((s) => s.results);
+export default function SavedResultsPage() {
+  const isLoggedIn = useIsLoggedIn((s) => s.isLoggedIn);
   const darkMode = useThemeStore((s) => s.darkMode);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState(null);
+
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(t);
-  }, []);
+    if (!isLoggedIn) navigate("/login");
+  }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    const loadSavedViz = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/saved-results/${id}`
+        );
+        const data = await res.json();
+        setResult(data.visualization || null);
+      } catch {
+        setResult(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSavedViz();
+  }, [id]);
 
   if (loading)
     return (
@@ -37,16 +57,16 @@ export default function ResultsPage() {
       </div>
     );
 
-  if (!results)
+  if (!result)
     return (
       <div
         className={`min-h-screen flex flex-col items-center justify-center text-center px-6 ${
           darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
         }`}
       >
-        <h1 className="text-2xl font-light mb-6">No saved results found</h1>
+        <h1 className="text-2xl font-light mb-6">No results found</h1>
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/dashboard")}
           className={`px-6 py-3 rounded-xl transition ${
             darkMode
               ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
@@ -58,11 +78,11 @@ export default function ResultsPage() {
       </div>
     );
 
-  const { vizName, studentResults, stats } = results;
+  const { vizName, studentResults, stats } = result;
 
   return (
     <div
-      className={`min-h-screen w-full pt-24 transition-colors ${
+      className={`min-h-screen pt-24 px-6 transition-colors ${
         darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
       }`}
     >
@@ -106,7 +126,7 @@ export default function ResultsPage() {
           </button>
         </div>
       </nav>
-
+      {/* HEADER */}
       <div className="max-w-5xl mx-auto text-center mb-14">
         <p
           className={`text-3xl font-light mb-1 ${
@@ -122,6 +142,7 @@ export default function ResultsPage() {
         </p>
       </div>
 
+      {/* CONTENT */}
       <div className="max-w-7xl mx-auto flex flex-col gap-10">
         <section id="charts-section">
           <ChartsSection
@@ -144,6 +165,7 @@ export default function ResultsPage() {
         </section>
       </div>
 
+      {/* FOOTER */}
       <div className="mt-14 mb-10 text-center">
         <button
           onClick={() => navigate(-1)}

@@ -4,30 +4,30 @@ const Visualization = require("../models/vizModel.js");
 
 router.post("/", async (req, res) => {
   try {
-    const { vizName, students, user } = req.body;
+    console.log("📥 Incoming body:", req.body);
 
-    // Validate input
-    if (!vizName || !students || !Array.isArray(students)) {
-      return res.status(400).json({ message: "Invalid request format" });
+    const { students, vizName, user } = req.body;
+
+    if (!students || !Array.isArray(students) || students.length === 0) {
+      return res.status(400).json({ message: "Invalid or missing students data" });
     }
 
     if (!user || !user.name || !user.email) {
       return res.status(400).json({ message: "User info missing!" });
     }
 
-    // Convert missing values to defaults
-    const normalized = students.map((s) => ({
-      name: s.name || "Unknown",
-      subject: s.subject || "N/A",
-      marks: Number(s.marks || 0),
-      totalMarks: Number(s.totalMarks || 100),
-      remarks: s.remarks || "",
-      percentage: (
-        ((Number(s.marks || 0)) / (Number(s.totalMarks || 100))) * 100
-      ).toFixed(2),
-    }));
+    // Normalize Excel data safely
+    const normalized = students.map((s) => {
+      return {
+        name: s.name || s.Name || "Unknown",
+        subject: s.subject || s.Subject || "N/A",
+        marks: Number(s.marks || s.Marks || 0),
+        totalMarks: Number(s.totalMarks || s.TotalMarks || 100),
+        remarks: s.remarks || s.Remarks || "N/A",
+      };
+    });
 
-    const marksList = normalized.map((s) => Number(s.marks));
+    const marksList = normalized.map((s) => s.marks);
 
     // Mean
     const mean = marksList.reduce((a, b) => a + b, 0) / marksList.length;
@@ -45,10 +45,10 @@ router.post("/", async (req, res) => {
     marksList.forEach((m) => (freq[m] = (freq[m] || 0) + 1));
     const maxFreq = Math.max(...Object.values(freq));
     const mode = Object.keys(freq)
-      .filter((k) => freq[k] == maxFreq)
+      .filter((k) => freq[k] === maxFreq)
       .map(Number);
 
-    // Highest & Lowest
+    // Highest & lowest
     const highest = Math.max(...marksList);
     const lowest = Math.min(...marksList);
 
@@ -57,16 +57,15 @@ router.post("/", async (req, res) => {
       marksList.reduce((a, b) => a + (b - mean) ** 2, 0) / marksList.length;
     const stdDeviation = Math.sqrt(variance);
 
-    // Pass/Fail
-    const passCount = marksList.filter((m) => m >= 33).length;
+    const passCount = marksList.filter((m) => m >= 0.3 * highest).length;
     const failCount = marksList.length - passCount;
 
-    // Save in MongoDB
+    // SAVE IN DB
     const savedVisualization = await Visualization.create({
-      vizName,
+      vizName: vizName || "Excel Upload Visualization",
       userName: user.name,
       userEmail: user.email,
-      totalStudents: students.length,
+      totalStudents: normalized.length,
       stats: {
         mean: mean.toFixed(2),
         median,
@@ -81,21 +80,21 @@ router.post("/", async (req, res) => {
       createdAt: new Date(),
     });
 
-    // Send response to frontend
     return res.status(200).json({
       success: true,
-      message: "Manual visualization saved successfully",
+      message: "Visualization saved successfully",
       savedId: savedVisualization._id,
       vizName: savedVisualization.vizName,
       userName: savedVisualization.userName,
       userEmail: savedVisualization.userEmail,
-      totalStudents: savedVisualization.totalStudents,
+      totalStudents: normalized.length,
       stats: savedVisualization.stats,
-      studentResults: savedVisualization.studentResults,
+      studentResults: normalized,
     });
+
   } catch (err) {
-    console.error("Error in /manual-entry:", err);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("❌ Error in /upload-excel:", err);
+    return res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
 });
 

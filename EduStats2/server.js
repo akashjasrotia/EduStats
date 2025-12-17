@@ -8,6 +8,10 @@ const loginRouter = require("./routes/login.js");
 const homeRouter = require('./routes/home.js');
 const logoutRouter = require('./routes/logout.js')
 const manualEntryRoute = require('./routes/manual-entry.js')
+const uploadExcelRoute = require("./routes/uploadExcel.js");
+const dashboardRoute = require('./routes/dashboard.js')
+const savedResultsRoute = require('./routes/saved-results.js');
+const deleteVizRoute = require('./routes/deleteViz.js');
 dotenv.config();
 connectDB();
 const app = express();
@@ -24,5 +28,9 @@ app.use("/api/login", loginRouter);
 app.use('/api/home', homeRouter);
 app.use('/api/logout',logoutRouter);
 app.use('/api/manual-entry',manualEntryRoute);
+app.use("/api/uploadExcel", uploadExcelRoute);
+app.use("/api/visuals", dashboardRoute);
+app.use("/api/saved-results", savedResultsRoute);
+app.use("/api/deleteViz", deleteVizRoute);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -11,6 +11,8 @@ import ProtectedRoute2 from "./components/ProtectedRoute2";
 import Contact from "./pages/Contact";
 import ManualEntry from "./pages/TrackManually";
 import ResultsPage from "./pages/Result";
+import Dashboard from "./pages/Dashboard";
+import SavedResultsPage from "./pages/Saved-results";
 
 export default function App() {
   return (
@@ -30,6 +32,7 @@ export default function App() {
             />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact/>}/>
+            <Route path="/dashboard" element={<Dashboard/>}/>
             <Route
             path="/home/manual"
             element={
@@ -39,6 +42,8 @@ export default function App() {
             }
           />
           <Route path="/results" element={<ResultsPage />} />
+          <Route path="/saved-results/:id" element={<SavedResultsPage />} />
+
             <Route
               path="/login"
               element={

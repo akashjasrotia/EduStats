@@ -6,106 +6,149 @@ import toast from "react-hot-toast";
 export default function Contact() {
   const darkMode = useThemeStore((s) => s.darkMode);
 
-  const bg = darkMode
-    ? "bg-slate-950"
-    : "bg-white";
-
-  const text = darkMode ? "text-gray-100" : "text-gray-900";
-  const subtle = darkMode ? "text-gray-400" : "text-gray-600";
-  const card = darkMode
-    ? "bg-white/5 border-white/10"
-    : "bg-white shadow-lg border-gray-200";
-
-  const input = darkMode
-    ? "bg-white/5 border-white/10 text-white placeholder:text-gray-500"
-    : "bg-gray-50 border-gray-300 placeholder:text-gray-400";
-
   const sendMessage = (e) => {
     e.preventDefault();
-    toast.success("Message sent successfully!", {
-      style: { background: "#0B82F0", color: "white" },
-    });
+    toast.success("Message sent successfully");
   };
 
   return (
-    <div className={`${bg} font-Raleway min-h-screen px-6 lg:px-24 py-20 transition-all duration-300`}>
-
-      <div className="grid border-2 border-gray-300 p-12 md:p-24 rounded-3xl grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
-
+    <div
+      className={`min-h-screen px-6 lg:px-24 py-20 transition-colors ${
+        darkMode ? "bg-zinc-950" : "bg-gray-50"
+      }`}
+    >
+      <div
+        className={`grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto rounded-3xl p-10 md:p-20 ${
+          darkMode
+            ? "bg-zinc-900/50 border border-zinc-800"
+            : "bg-white border border-gray-200 shadow-sm"
+        }`}
+      >
+        {/* LEFT */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{duration:0.5}}
+          transition={{ duration: 0.5 }}
           className="flex flex-col gap-10"
         >
           <div>
-            <h2 className={`text-5xl md:text-7xl font-semibold mb-4 ${text}`}>
-              Get in, <br/> Touch with us.
+            <h2
+              className={`text-4xl md:text-6xl font-light tracking-tight mb-4 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
+              Get in <br /> Touch
             </h2>
-            <p className={`text-lg ${subtle}`}>
-              We're here to help! Whether you have a question about our services, need assistance with your account, or want to provide feedback, our team is ready to assist you.
+            <p
+              className={`text-lg ${
+                darkMode ? "text-zinc-500" : "text-gray-600"
+              }`}
+            >
+              Have a question, need help, or want to share feedback?
+              We’re here to help you.
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 text-lg">
+          <div className="flex flex-col gap-6 text-sm">
             <div className="flex items-center gap-4">
-              <Mail className="text-mainBlue" />
-              <span className={subtle}>akashjasrotia2005@gmail.com</span>
+              <Mail className="text-indigo-400" />
+              <span
+                className={`${
+                  darkMode ? "text-zinc-400" : "text-gray-600"
+                }`}
+              >
+                akashjasrotia2005@gmail.com
+              </span>
             </div>
+
             <div className="flex items-center gap-4">
-              <Phone className="text-mainBlue" />
-              <span className={subtle}>+91 98765 43210</span>
+              <Phone className="text-indigo-400" />
+              <span
+                className={`${
+                  darkMode ? "text-zinc-400" : "text-gray-600"
+                }`}
+              >
+                +91 7087792964
+              </span>
             </div>
+
             <div className="flex items-center gap-4">
-              <MapPin className="text-mainBlue" />
-              <span className={subtle}>Jalandhar, India</span>
+              <MapPin className="text-indigo-400" />
+              <span
+                className={`${
+                  darkMode ? "text-zinc-400" : "text-gray-600"
+                }`}
+              >
+                Jalandhar, India
+              </span>
             </div>
           </div>
         </motion.div>
 
+        {/* RIGHT / FORM */}
         <motion.form
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{duration:0.5}}
+          transition={{ duration: 0.5 }}
           onSubmit={sendMessage}
-          className={`p-10 rounded-2xl border ${card} backdrop-blur-xl flex flex-col gap-6`}
+          className={`rounded-2xl p-10 flex flex-col gap-6 ${
+            darkMode
+              ? "bg-zinc-900 border border-zinc-800"
+              : "bg-white border border-gray-200"
+          }`}
         >
           <input
             type="text"
             placeholder="Your name"
             required
-            className={`p-4 rounded-xl border ${input} focus:ring-2 ring-mainBlue outline-none`}
+            className={`p-4 rounded-xl border outline-none transition ${
+              darkMode
+                ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-indigo-500"
+                : "bg-gray-50 border-gray-300 placeholder:text-gray-400 focus:border-indigo-500"
+            }`}
           />
 
           <input
             type="email"
             placeholder="Your email"
             required
-            className={`p-4 rounded-xl border ${input} focus:ring-2 ring-mainBlue outline-none`}
+            className={`p-4 rounded-xl border outline-none transition ${
+              darkMode
+                ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-indigo-500"
+                : "bg-gray-50 border-gray-300 placeholder:text-gray-400 focus:border-indigo-500"
+            }`}
           />
 
           <textarea
-            placeholder="Your message..."
             rows="5"
+            placeholder="Your message..."
             required
-            className={`p-4 rounded-xl border ${input} focus:ring-2 ring-mainBlue outline-none`}
+            className={`p-4 rounded-xl border outline-none transition resize-none ${
+              darkMode
+                ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-indigo-500"
+                : "bg-gray-50 border-gray-300 placeholder:text-gray-400 focus:border-indigo-500"
+            }`}
           ></textarea>
 
           <button
             type="submit"
-            className="
-              flex items-center justify-center gap-3 bg-mainBlue text-white 
-              py-3 rounded-xl font-medium text-lg
-              hover:bg-mainBlue/90 transition-all
-            "
+            className={`mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-medium transition ${
+              darkMode
+                ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
+                : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+            }`}
           >
-            Send Message <Send size={20} />
+            Send Message <Send size={18} />
           </button>
         </motion.form>
       </div>
 
-      <p className={`text-center mt-10 text-sm ${subtle}`}>
-        We reply within 24 hours.
+      <p
+        className={`text-center mt-10 text-sm ${
+          darkMode ? "text-zinc-500" : "text-gray-500"
+        }`}
+      >
+        We usually reply within 24 hours.
       </p>
     </div>
   );

@@ -14,9 +14,12 @@ import {
   UserPlus,
   Moon,
   Sun,
+  Award,
 } from "lucide-react";
+import { useResultStore } from "../stores/ResultStore";
 
 export default function Sidebar() {
+  const clearResults = useResultStore((s) => s.clearResults);
   const darkMode = useThemeStore((s) => s.darkMode);
   const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
 
@@ -33,18 +36,16 @@ export default function Sidebar() {
         credentials: "include",
       });
 
-      const data = await res.json();
-
       if (res.ok) {
         logout();
-        toast.success("Logged out successfully!");
-        setTimeout(() => navigate("/login"), 1000);
+        clearResults();
+        toast.success("Logged out successfully");
+        setTimeout(() => navigate("/login"), 800);
       } else {
-        toast.error(data.message || "Logout failed. Try again.");
+        toast.error("Logout failed");
       }
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Something went wrong while logging out.");
+    } catch {
+      toast.error("Something went wrong");
     }
   };
 
@@ -53,15 +54,19 @@ export default function Sidebar() {
     ${expanded ? "w-40 ml-3" : "w-0"}
   `;
 
+  const navBase =
+    "flex items-center p-3 rounded-xl transition-all duration-200";
+
   const getNavLinkClass = ({ isActive }) =>
-    `flex items-center p-3 rounded-lg transition-colors duration-200 ` +
-    (isActive
-      ? darkMode
-        ? "bg-mainBlue/30 text-mainBlue font-medium"
-        : "bg-mainBlue/10 text-mainBlue font-medium"
-      : darkMode
-      ? "text-gray-300 hover:bg-gray-800 hover:text-white"
-      : "text-gray-700 hover:bg-gray-100 hover:text-black");
+    `${navBase} ${
+      isActive
+        ? darkMode
+          ? "bg-indigo-500/15 text-indigo-400"
+          : "bg-indigo-50 text-indigo-700"
+        : darkMode
+        ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+        : "text-gray-600 hover:bg-gray-100 hover:text-black"
+    }`;
 
   const navItems = [
     { to: "/home", label: "Home", icon: <Home size={20} /> },
@@ -70,6 +75,7 @@ export default function Sidebar() {
       : []),
     { to: "/about", label: "About", icon: <Info size={20} /> },
     { to: "/contact", label: "Contact", icon: <Phone size={20} /> },
+    { to: "/results", label: "Saved Results", icon: <Award size={20} /> },
   ];
 
   return (
@@ -77,34 +83,32 @@ export default function Sidebar() {
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
       className={`
-        h-screen flex flex-col shadow-xl select-none
-        transition-all duration-300 fixed left-0 top-0 z-50
-        overflow-hidden 
+        fixed left-0 top-0 z-50 h-screen flex flex-col select-none
+        transition-all duration-300 overflow-hidden
         ${expanded ? "w-64" : "w-16"}
-        ${darkMode ? "bg-gray-900 text-gray-200" : "bg-white text-gray-700"} 
+        ${darkMode ? "bg-zinc-900" : "bg-white"}
       `}
     >
       {/* LOGO */}
       <div className="flex items-center gap-3 px-4 py-4">
-        {expanded ? (
-          <Menu size={26} />
-        ) : (
-          <img src="/logo.png" alt="Logo" className="h-7 w-7" />
-        )}
+        <Menu
+          size={26}
+          className={darkMode ? "text-white" : "text-black"}
+        />
         <span
-          className={`mt-2 
+          className={`
+            text-xl tracking-widest font-medium
             overflow-hidden whitespace-nowrap transition-all duration-200
-            text-xl tracking-widest font-['steiner']
-            ${darkMode ? "text-white" : "text-mainBlue"} 
             ${expanded ? "w-44" : "w-0"}
+            ${darkMode ? "text-white" : "text-black"}
           `}
         >
           EduStats
         </span>
       </div>
 
-      {/* NAV LINKS */}
-      <nav className="flex flex-col mt-4 gap-2 px-2">
+      {/* NAV */}
+      <nav className="flex flex-col gap-1 px-2 mt-2">
         {navItems.map((item, i) => (
           <NavLink key={i} to={item.to} className={getNavLinkClass}>
             {item.icon}
@@ -113,7 +117,7 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* BOTTOM SECTION */}
+      {/* BOTTOM */}
       <div className="mt-auto flex flex-col gap-2 px-2 pb-6">
         {!isLoggedIn ? (
           <>
@@ -124,10 +128,11 @@ export default function Sidebar() {
 
             <NavLink
               to="/signup"
-              className={`
-                flex items-center p-3 rounded-lg text-white transition-colors duration-200
-                bg-mainBlue hover:bg-mainBlue/90
-              `}
+              className={`${navBase} ${
+                darkMode
+                  ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
+                  : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+              }`}
             >
               <UserPlus size={20} />
               <span className={textClass}>Signup</span>
@@ -136,43 +141,37 @@ export default function Sidebar() {
         ) : (
           <button
             onClick={handleLogout}
-            className="flex items-center p-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors duration-200"
+            className={`${navBase} cursor-pointer text-red-500 bg-red-500/30 hover:bg-red-500/10`}
           >
             <LogOut size={20} />
             <span className={textClass}>Logout</span>
           </button>
         )}
 
-        {/* DARK MODE TOGGLE */}
+        {/* THEME TOGGLE */}
         <button
           onClick={toggleDarkMode}
-          className={`
-            flex items-center p-3 rounded-lg transition-colors duration-200 w-full
-            ${
-              darkMode
-                ? "text-gray-300 hover:bg-gray-800 hover:text-white"
-                : "text-gray-700 hover:bg-gray-100 hover:text-black"
-            }
-          `}
+          className={`${navBase} ${
+            darkMode
+              ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+              : "text-gray-600 hover:bg-gray-100 hover:text-black"
+          }`}
         >
           {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-
           <span className={textClass}>
             {darkMode ? "Light Mode" : "Dark Mode"}
           </span>
 
           {expanded && (
             <div
-              className={`
-                w-10 h-5 flex items-center rounded-full p-0.5 transition-colors duration-200 ml-auto
-                ${darkMode ? "bg-mainBlue" : "bg-gray-300"}
-              `}
+              className={`ml-auto w-10 h-5 flex items-center rounded-full p-0.5 transition ${
+                darkMode ? "bg-indigo-500" : "bg-gray-300"
+              }`}
             >
               <div
-                className={`
-                  w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200
-                  ${darkMode ? "translate-x-5" : "translate-x-0"}
-                `}
+                className={`w-4 h-4 bg-white rounded-full shadow transition-transform ${
+                  darkMode ? "translate-x-5" : "translate-x-0"
+                }`}
               ></div>
             </div>
           )}

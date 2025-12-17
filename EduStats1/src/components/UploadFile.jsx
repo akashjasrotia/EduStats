@@ -1,71 +1,155 @@
+import * as XLSX from "xlsx";
 import { useState } from "react";
 import { UploadCloud } from "lucide-react";
+import { useResultStore } from "../stores/ResultStore";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useIsLoggedIn } from "../stores/IsLoggedInStore";
+import { useThemeStore } from "../stores/ThemeStore";
 
-export default function FileUploadBox({ darkMode }) {
-  const [dragActive, setDragActive] = useState(false);
-  const [fileName, setFileName] = useState(null);
+function ExcelUpload() {
+  const darkMode = useThemeStore((s) => s.darkMode);
+  const user = useIsLoggedIn((s) => s.user);
+  const navigate = useNavigate();
+  const setResults = useResultStore((s) => s.setResults);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
+  const [excelData, setExcelData] = useState([]);
+  const [uploadedFileName, setUploadedFileName] = useState("");
 
-  const handleDragLeave = () => {
-    setDragActive(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-
-    const file = e.dataTransfer.files[0];
-    if (file) setFileName(file.name);
-  };
-
-  const handleFileSelect = (e) => {
+  const handleFile = (e) => {
     const file = e.target.files[0];
-    if (file) setFileName(file.name);
+    if (!file) return;
+
+    setUploadedFileName(file.name);
+
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onload = (event) => {
+      const workbook = XLSX.read(event.target.result, { type: "buffer" });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const raw = XLSX.utils.sheet_to_json(worksheet);
+
+      const formatted = raw.map((s) => ({
+        name: s.Name || s.name || "Unknown",
+        marks: Number(s.Marks || s.marks || 0),
+        subject: s.Subject || s.subject || "N/A",
+        totalMarks: Number(s.TotalMarks || s.totalMarks || 100),
+        remarks: s.Remarks || s.remarks || "N/A",
+      }));
+
+      setExcelData(formatted);
+    };
   };
 
-  const openFilePicker = () => {
-    document.getElementById("fileInput").click();
+  const sendToBackend = async () => {
+    if (!excelData.length) {
+      toast.error("Please upload an Excel file first");
+      return;
+    }
+
+    const payload = {
+      students: excelData,
+      vizName: "Excel Upload Visualization",
+      user: {
+        name: user?.name || "Guest",
+        email: user?.email || "guest@example.com",
+      },
+    };
+
+    const res = await fetch("http://localhost:3000/api/uploadExcel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      setResults(result);
+      toast.success("Data processed successfully");
+      setTimeout(() => navigate("/results"), 800);
+    } else {
+      toast.error(result.message || "Something went wrong");
+    }
   };
 
   return (
     <div
-      className={`
-        flex flex-col items-center justify-center gap-3 cursor-pointer
-        p-8 rounded-2xl border-2 border-dashed transition-all duration-300
-        ${dragActive ? "border-mainBlue bg-mainBlue/10" : ""}
-        ${darkMode 
-          ? "border-gray-600 bg-gray-800 hover:bg-gray-700" 
-          : "border-gray-300 bg-white hover:bg-gray-100"}
-      `}
-      onClick={openFilePicker}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
+      className={`group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${
+        darkMode
+          ? "bg-zinc-900 hover:bg-zinc-900/80"
+          : "bg-white hover:bg-gray-50 shadow-sm hover:shadow-md"
+      }`}
     >
-      <UploadCloud size={44} className="text-mainBlue" />
+      <div
+        className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 group-hover:opacity-30 ${
+          darkMode ? "bg-emerald-500" : "bg-emerald-400"
+        }`}
+      ></div>
 
-      <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
-        Upload Data
-      </p>
+      <div className="relative flex flex-col items-center text-center gap-4">
+        <label
+          htmlFor="excel-upload"
+          className={`cursor-pointer inline-flex p-4 rounded-2xl transition ${
+            darkMode ? "bg-emerald-500/10" : "bg-emerald-50"
+          }`}
+        >
+          <UploadCloud
+            className={`w-8 h-8 ${
+              darkMode ? "text-emerald-400" : "text-emerald-600"
+            }`}
+          />
+        </label>
 
-      <p className={`${darkMode ? "text-gray-400" : "text-gray-600"} text-sm text-center`}>
-        {fileName ? (
-          <span className="font-medium text-mainBlue">{fileName}</span>
-        ) : (
-          "Click or drag a file here to upload"
+        <input
+          id="excel-upload"
+          type="file"
+          accept=".xlsx,.xls"
+          onChange={handleFile}
+          className="hidden"
+        />
+
+        <div>
+          <h3
+            className={`text-xl font-medium mb-1 ${
+              darkMode ? "text-white" : "text-black"
+            }`}
+          >
+            Upload Excel
+          </h3>
+          <p
+            className={`text-sm ${
+              darkMode ? "text-zinc-500" : "text-gray-600"
+            }`}
+          >
+            Import student performance data
+          </p>
+        </div>
+
+        {uploadedFileName && (
+          <p
+            className={`text-xs ${
+              darkMode ? "text-zinc-400" : "text-gray-500"
+            }`}
+          >
+            📄 {uploadedFileName}
+          </p>
         )}
-      </p>
 
-      <input 
-        type="file" 
-        id="fileInput" 
-        className="hidden" 
-        onChange={handleFileSelect}
-      />
+        <button
+          onClick={sendToBackend}
+          className={`w-full mt-2 py-2 rounded-xl font-medium transition ${
+            darkMode
+              ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+              : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+          }`}
+        >
+          Process Data
+        </button>
+      </div>
     </div>
   );
 }
+
+export default ExcelUpload;
