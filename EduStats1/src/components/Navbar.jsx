@@ -70,12 +70,12 @@ export default function Sidebar() {
 
   const navItems = [
     { to: "/home", label: "Home", icon: <Home size={20} /> },
+    { to: "/results", label: "Saved Results", icon: <Award size={20} /> },
     ...(isLoggedIn
       ? [{ to: "/dashboard", label: "Dashboard", icon: <BarChart3 size={20} /> }]
       : []),
     { to: "/about", label: "About", icon: <Info size={20} /> },
     { to: "/contact", label: "Contact", icon: <Phone size={20} /> },
-    { to: "/results", label: "Saved Results", icon: <Award size={20} /> },
   ];
 
   return (

@@ -52,11 +52,11 @@ export default function AiOverview({ stats, studentResults, darkMode }) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer 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",
+            "Bearer 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",
           "HTTP-Referer": "http://localhost",
         },
         body: JSON.stringify({
-          model: "google/gemma-3-12b-it:free",
+          model: "openai/gpt-oss-20b:free",
           messages: [
             {
               role: "user",
