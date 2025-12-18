@@ -12,6 +12,7 @@ const uploadExcelRoute = require("./routes/uploadExcel.js");
 const dashboardRoute = require('./routes/dashboard.js')
 const savedResultsRoute = require('./routes/saved-results.js');
 const deleteVizRoute = require('./routes/deleteViz.js');
+// const aiRoute = require('./routes/ai.js');
 dotenv.config();
 connectDB();
 const app = express();
@@ -32,5 +33,6 @@ app.use("/api/uploadExcel", uploadExcelRoute);
 app.use("/api/visuals", dashboardRoute);
 app.use("/api/saved-results", savedResultsRoute);
 app.use("/api/deleteViz", deleteVizRoute);
+// app.use("/api/ai", aiRoute);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

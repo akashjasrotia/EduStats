@@ -1,101 +1,116 @@
 import { NavLink } from "react-router-dom";
 import { useIsLoggedIn } from "../stores/IsLoggedInStore";
+import { useThemeStore } from "../stores/ThemeStore";
 
 export default function Landing() {
-  const isLoggedIn = useIsLoggedIn((state) => state.isLoggedIn);
+  const isLoggedIn = useIsLoggedIn((s) => s.isLoggedIn);
+  const darkMode = useThemeStore((s) => s.darkMode);
 
   return (
-    <div className="min-h-screen font-[Poppins] bg-linear-to-br from-[#F7F8FC] to-[#EEF1F7]">
-
-      <div className="
-        w-full h-[12vh] px-10 flex items-center justify-between
-        backdrop-blur-xl bg-white/60 shadow-md sticky top-0 z-40
-        border-b border-white/40
-      ">
-        <div className="text-2xl font-bold tracking-tight text-mainBlue">
-          EduStats
-        </div>
-
-        <div className="hidden md:flex items-center gap-10 text-gray-700 text-[15px] font-medium">
-          <NavLink to="/home" className="hover:text-mainBlue transition">Home</NavLink>
-          <NavLink to="/visualizations" className="hover:text-mainBlue transition">Visualizations</NavLink>
-          <NavLink to="/about" className="hover:text-mainBlue transition">About</NavLink>
-          <NavLink to="/contact" className="hover:text-mainBlue transition">Contact</NavLink>
-        </div>
-
-        {/* Auth Button */}
-        {isLoggedIn ? (
-          <NavLink
-            to="/profile"
-            className="
-              bg-mainBlue text-white px-6 py-2.5 rounded-xl 
-              shadow-sm hover:bg-mainBlue/90 transition font-medium
-            "
-          >
-            Profile
-          </NavLink>
-        ) : (
-          <NavLink
-            to="/signup"
-            className="
-              bg-mainBlue text-white px-6 py-2.5 rounded-xl 
-              shadow-sm hover:bg-mainBlue/90 transition font-medium
-            "
-          >
-            Login / Signup
-          </NavLink>
-        )}
-      </div>
-
-
-
-      {/* HERO SECTION – Premium Modern UI */}
-      <section
-        className="-translate-y-[14%]
-          w-full h-[88vh] flex justify-center items-center 
-          px-6 mt-6
-        "
+    <div
+      className={`min-h-screen flex flex-col justify-between items-center transition-colors ${
+        darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
+      }`}
+    >
+      {/* NAVBAR */}
+      <header
+        className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b transition ${
+          darkMode
+            ? "bg-zinc-900/70 border-zinc-800"
+            : "bg-white/70 border-gray-200"
+        }`}
       >
-        <div className="
-          flex flex-col items-center text-center
-        ">
-          <h1 className="
-            text-5xl md:text-8xl font-bold leading-[1.2] text-gray-900
-          ">
+        <div className="max-w-7xl mx-auto px-8 h-[72px] flex items-center justify-between">
+          <span
+            className={`text-xl tracking-wide font-semibold ${
+              darkMode ? "text-white" : "text-black"
+            }`}
+          >
+            EduStats
+          </span>
+
+          <nav
+            className={`hidden md:flex gap-10 text-sm ${
+              darkMode ? "text-zinc-400" : "text-gray-600"
+            }`}
+          >
+            <NavLink to="/home" className="hover:text-indigo-400 transition">
+              Home
+            </NavLink>
+            <NavLink to="/about" className="hover:text-indigo-400 transition">
+              About
+            </NavLink>
+            <NavLink to="/contact" className="hover:text-indigo-400 transition">
+              Contact
+            </NavLink>
+          </nav>
+
+          <NavLink
+            to={isLoggedIn ? "/home" : "/signup"}
+            className={`px-5 py-2 rounded-xl text-sm font-medium transition ${
+              darkMode
+                ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
+                : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+            }`}
+          >
+            {isLoggedIn ? "Dashboard" : "Get Started"}
+          </NavLink>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section className="mt-60 -translate-y-[10%] pb-24">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h1
+            className={`text-5xl md:text-7xl font-light tracking-tight mb-6 ${
+              darkMode ? "text-white" : "text-black"
+            }`}
+          >
             Transform the way you understand{" "}
             <span className="text-mainBlue">education data</span>.
           </h1>
 
-          <p className="text-lg md:text-xl mt-6 text-gray-600">
-            Clean, fast, and intelligent visualizations—built for students, teachers,
-            and institutions that want clarity at a glance.
+          <p
+            className={`max-w-2xl mx-auto text-lg leading-relaxed ${
+              darkMode ? "text-zinc-500" : "text-gray-600"
+            }`}
+          >
+            EduStats helps students and educators transform raw academic data
+            into meaningful insights, trends, and performance metrics —
+            effortlessly.
           </p>
 
-          <div className="flex gap-4 mt-10">
-            <a
-              href="/home"
-              className="
-                py-3.5 px-8 bg-mainBlue text-white rounded-xl
-                shadow-md hover:bg-mainBlue/90 transition text-lg font-medium
-              "
+          <div className="flex justify-center gap-4 mt-12">
+            <NavLink
+              to="/home"
+              className="px-8 py-3 rounded-xl text-sm font-medium transition
+              bg-indigo-500 text-white hover:bg-indigo-600"
             >
-              Get Started
-            </a>
+              Explore Dashboard
+            </NavLink>
 
-            <a
-              href="/contact"
-              className="
-                py-3.5 px-8 bg-white text-mainBlue rounded-xl
-                border border-mainBlue/30 shadow hover:shadow-md transition
-                text-lg font-medium
-              "
+            <NavLink
+              to="/contact"
+              className={`px-8 py-3 rounded-xl text-sm font-medium transition ${
+                darkMode
+                  ? "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
             >
               Contact Us
-            </a>
+            </NavLink>
           </div>
         </div>
       </section>
 
+      {/* FOOTER NOTE */}
+      <footer
+        className={`text-center text-sm pb-10 ${
+          darkMode ? "text-zinc-600" : "text-gray-500"
+        }`}
+      >
+        Built for clarity • Designed for focus
+      </footer>
     </div>
   );
 }

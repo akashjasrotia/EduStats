@@ -4,6 +4,7 @@ import { useIsLoggedIn } from "../stores/IsLoggedInStore";
 import { useThemeStore } from "../stores/ThemeStore";
 import { useNavigate } from "react-router-dom";
 import ExcelUpload from "../components/UploadFile";
+import WelcomeBack from "../components/WelcomeBack";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -38,6 +39,10 @@ export default function Home() {
       </div>
     );
   }
+  function randomChange() {
+    const change = Math.floor(Math.random() * 21) - 10;
+    return (change >= 0 ? "+" : "") + change + "%";
+  }
 
   return (
     <div
@@ -47,23 +52,7 @@ export default function Home() {
     >
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Header */}
-        <div className="mb-16">
-          <h1
-            className={`text-5xl font-light tracking-tight mb-4 ${
-              darkMode ? "text-white" : "text-black"
-            }`}
-          >
-            Welcome back,{" "}
-            <span className="font-medium">{user?.name || "User"}</span>
-          </h1>
-          <p
-            className={`text-lg ${
-              darkMode ? "text-zinc-500" : "text-gray-500"
-            }`}
-          >
-            Ready to explore your educational insights?
-          </p>
-        </div>
+        <WelcomeBack name={user?.name || "User"} darkMode={darkMode} />
 
         {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -195,9 +184,9 @@ export default function Home() {
         {/* Quick Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           {[
-            { label: "Total Sessions", value: "24", change: "+12%" },
-            { label: "Hours Logged", value: "156", change: "+8%" },
-            { label: "Avg. Score", value: "87%", change: "+5%" },
+            { label: "Total Sessions", value: "24", change: randomChange() },
+            { label: "Hours Logged", value: "156", change: randomChange() },
+            { label: "Avg. Score", value: "87%", change: randomChange() },
           ].map((stat, i) => (
             <div
               key={i}
