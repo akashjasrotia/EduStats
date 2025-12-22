@@ -1,14 +1,48 @@
 import { useThemeStore } from "../stores/ThemeStore";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Contact() {
   const darkMode = useThemeStore((s) => s.darkMode);
 
-  const sendMessage = (e) => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const sendMessage = async (e) => {
     e.preventDefault();
-    toast.success("Message sent successfully");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:3000/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Message sent successfully");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        toast.error(data.message || "Failed to send message");
+      }
+    } catch (err) {
+      toast.error("Server error. Please try again.");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -24,7 +58,6 @@ export default function Contact() {
             : "bg-white border border-gray-200 shadow-sm"
         }`}
       >
-        {/* LEFT */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -52,40 +85,27 @@ export default function Contact() {
           <div className="flex flex-col gap-6 text-sm">
             <div className="flex items-center gap-4">
               <Mail className="text-indigo-400" />
-              <span
-                className={`${
-                  darkMode ? "text-zinc-400" : "text-gray-600"
-                }`}
-              >
+              <span className={darkMode ? "text-zinc-400" : "text-gray-600"}>
                 akashjasrotia2005@gmail.com
               </span>
             </div>
 
             <div className="flex items-center gap-4">
               <Phone className="text-indigo-400" />
-              <span
-                className={`${
-                  darkMode ? "text-zinc-400" : "text-gray-600"
-                }`}
-              >
+              <span className={darkMode ? "text-zinc-400" : "text-gray-600"}>
                 +91 7087792964
               </span>
             </div>
 
             <div className="flex items-center gap-4">
               <MapPin className="text-indigo-400" />
-              <span
-                className={`${
-                  darkMode ? "text-zinc-400" : "text-gray-600"
-                }`}
-              >
+              <span className={darkMode ? "text-zinc-400" : "text-gray-600"}>
                 Jalandhar, India
               </span>
             </div>
           </div>
         </motion.div>
 
-        {/* RIGHT / FORM */}
         <motion.form
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -98,6 +118,9 @@ export default function Contact() {
           }`}
         >
           <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
             type="text"
             placeholder="Your name"
             required
@@ -109,6 +132,9 @@ export default function Contact() {
           />
 
           <input
+            name="email"
+            value={form.email}
+            onChange={handleChange}
             type="email"
             placeholder="Your email"
             required
@@ -120,6 +146,9 @@ export default function Contact() {
           />
 
           <textarea
+            name="message"
+            value={form.message}
+            onChange={handleChange}
             rows="5"
             placeholder="Your message..."
             required
@@ -128,17 +157,18 @@ export default function Contact() {
                 ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-indigo-500"
                 : "bg-gray-50 border-gray-300 placeholder:text-gray-400 focus:border-indigo-500"
             }`}
-          ></textarea>
+          />
 
           <button
             type="submit"
+            disabled={loading}
             className={`mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-medium transition ${
               darkMode
                 ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
                 : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-            }`}
+            } ${loading && "opacity-60 cursor-not-allowed"}`}
           >
-            Send Message <Send size={18} />
+            {loading ? "Sending..." : "Send Message"} <Send size={18} />
           </button>
         </motion.form>
       </div>

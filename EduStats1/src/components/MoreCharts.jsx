@@ -12,16 +12,14 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function MoreChartsSection({ studentResults, stats, darkMode }) {
   if (!studentResults || studentResults.length === 0) return null;
 
-  const passCount = stats.passCount;
-  const failCount = stats.failCount;
-
+  /* ================= PASS / FAIL ================= */
   const passFailData = {
     labels: ["Pass", "Fail"],
     datasets: [
       {
-        data: [passCount, failCount],
+        data: [stats.passCount, stats.failCount],
         backgroundColor: darkMode
-          ? ["#22c55e", "#ef4444"] // zinc-safe green/red
+          ? ["#22c55e", "#ef4444"]
           : ["#16a34a", "#dc2626"],
         borderWidth: 0,
         hoverOffset: 16,
@@ -29,6 +27,7 @@ export default function MoreChartsSection({ studentResults, stats, darkMode }) {
     ],
   };
 
+  /* ================= GRADE DISTRIBUTION ================= */
   const gradeBuckets = { A: 0, B: 0, C: 0, D: 0, F: 0 };
   studentResults.forEach((s) => {
     const pct = (s.marks / s.totalMarks) * 100;
@@ -53,6 +52,7 @@ export default function MoreChartsSection({ studentResults, stats, darkMode }) {
     ],
   };
 
+  /* ================= PERFORMANCE ================= */
   const performance = { High: 0, Average: 0, Low: 0 };
   studentResults.forEach((s) => {
     const pct = (s.marks / s.totalMarks) * 100;
@@ -75,8 +75,35 @@ export default function MoreChartsSection({ studentResults, stats, darkMode }) {
     ],
   };
 
+  /* ================= ABOVE / BELOW AVERAGE ================= */
+  let above = 0;
+  let below = 0;
+  let equal = 0;
+
+  studentResults.forEach((s) => {
+    if (s.marks > stats.mean) above++;
+    else if (s.marks < stats.mean) below++;
+    else equal++;
+  });
+
+  const averageSplitData = {
+    labels: ["Above Average", "Below Average", "At Average"],
+    datasets: [
+      {
+        data: [above, below, equal],
+        backgroundColor: darkMode
+          ? ["#4ade80", "#f87171", "#a1a1aa"]
+          : ["#22c55e", "#ef4444", "#9ca3af"],
+        borderWidth: 0,
+        hoverOffset: 16,
+      },
+    ],
+  };
+
+  /* ================= STYLES ================= */
   const cardClass = `
-    rounded-2xl p-6 transition-all duration-300
+    rounded-2xl p-6 flex flex-col items-center justify-center
+    transition-all duration-300
     ${
       darkMode
         ? "bg-zinc-900 border border-zinc-800"
@@ -89,64 +116,47 @@ export default function MoreChartsSection({ studentResults, stats, darkMode }) {
     ${darkMode ? "text-white" : "text-black"}
   `;
 
+  const legendOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          color: darkMode ? "#d4d4d8" : "#374151",
+        },
+      },
+    },
+  };
+
   return (
     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* PASS / FAIL */}
-      <div className={`${cardClass} flex flex-col items-center`}>
-        <h3 className={titleClass}>Pass vs Fail</h3>
-        <div className="w-[240px] h-[240px]">
-          <Pie
-            data={passFailData}
-            options={{
-              plugins: {
-                legend: {
-                  labels: {
-                    color: darkMode ? "#d4d4d8" : "#374151",
-                  },
-                },
-              },
-            }}
-          />
+      {/* ABOVE / BELOW AVERAGE */}
+      <div className={cardClass}>
+        <h3 className={titleClass}>Above vs Below Average</h3>
+        <div className="w-[260px]">
+          <Pie data={averageSplitData} options={legendOptions} />
         </div>
       </div>
 
-      {/* GRADES */}
-      <div className={`${cardClass} flex flex-col items-center`}>
+      {/* PASS / FAIL */}
+      <div className={cardClass}>
+        <h3 className={titleClass}>Pass vs Fail</h3>
+        <div className="w-[260px]">
+          <Pie data={passFailData} options={legendOptions} />
+        </div>
+      </div>
+
+      {/* GRADE DISTRIBUTION */}
+      <div className={cardClass}>
         <h3 className={titleClass}>Grade Distribution</h3>
-        <div className="w-[240px] h-[240px]">
-          <Pie
-            data={gradeData}
-            options={{
-              plugins: {
-                legend: {
-                  labels: {
-                    color: darkMode ? "#d4d4d8" : "#374151",
-                  },
-                },
-              },
-            }}
-          />
+        <div className="w-[260px]">
+          <Pie data={gradeData} options={legendOptions} />
         </div>
       </div>
 
       {/* PERFORMANCE */}
-      <div
-        className={`${cardClass} md:col-span-2 flex flex-col items-center`}
-      >
+      <div className={cardClass}>
         <h3 className={titleClass}>Performance Categories</h3>
-        <div className="w-[280px] h-[280px]">
-          <Pie
-            data={performanceData}
-            options={{
-              plugins: {
-                legend: {
-                  labels: {
-                    color: darkMode ? "#d4d4d8" : "#374151",
-                  },
-                },
-              },
-            }}
-          />
+        <div className="w-[260px]">
+          <Pie data={performanceData} options={legendOptions} />
         </div>
       </div>
     </div>

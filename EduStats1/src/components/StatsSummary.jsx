@@ -37,7 +37,7 @@ export default function StatsSummary({ stats, darkMode }) {
         </p>
       </div>
 
-      {/* GRID */}
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {Object.entries(stats)
           .filter(([key]) => key !== "students")

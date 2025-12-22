@@ -16,7 +16,7 @@ export default function Login() {
     email: "",
     password: "",
   });
-  // eslint-disable-next-line no-unused-vars
+  
   const [responseData, setResponseData] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -60,7 +60,7 @@ export default function Login() {
         darkMode ? "bg-[#0a0a0a]" : "bg-gray-50"
       }`}
     >
-      {/* Subtle Background Gradients - Toned down for minimalism */}
+     
       <div className={`absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none`}>
          <div className={`absolute top-[-10%] left-[-5%] w-96 h-96 rounded-full blur-[120px] opacity-20 ${darkMode ? 'bg-indigo-900' : 'bg-blue-200'}`} />
          <div className={`absolute bottom-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] opacity-20 ${darkMode ? 'bg-blue-900' : 'bg-indigo-200'}`} />
@@ -90,7 +90,7 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Google Login - Removed Scale, Simplified Border */}
+        
         <a
           href="http://localhost:3000/api/auth/google"
           className={`flex items-center justify-center gap-3 w-full py-2.5 rounded-lg border text-sm font-medium transition-colors duration-200 ${
@@ -120,7 +120,7 @@ export default function Login() {
           Google
         </a>
 
-        {/* Divider - Simplified */}
+       
         <div className="relative flex py-6 items-center">
           <div className={`flex-grow border-t ${darkMode ? "border-neutral-800" : "border-gray-200"}`}></div>
           <span className={`flex-shrink-0 mx-3 text-[11px] font-medium uppercase tracking-widest ${darkMode ? "text-neutral-500" : "text-gray-400"}`}>
@@ -130,7 +130,7 @@ export default function Login() {
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Email Field */}
+         
           <div className="space-y-1.5">
             <label className={`text-xs font-medium ml-1 ${darkMode ? "text-neutral-300" : "text-gray-700"}`}>
               Email Address
@@ -156,7 +156,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Password Field */}
+          
           <div className="space-y-1.5">
              <div className="flex justify-between items-center ml-1">
               <label className={`text-xs font-medium ${darkMode ? "text-neutral-300" : "text-gray-700"}`}>

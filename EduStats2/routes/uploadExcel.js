@@ -9,14 +9,16 @@ router.post("/", async (req, res) => {
     const { students, vizName, user } = req.body;
 
     if (!students || !Array.isArray(students) || students.length === 0) {
-      return res.status(400).json({ message: "Invalid or missing students data" });
+      return res
+        .status(400)
+        .json({ message: "Invalid or missing students data" });
     }
 
     if (!user || !user.name || !user.email) {
       return res.status(400).json({ message: "User info missing!" });
     }
 
-    // Normalize Excel data safely
+    
     const normalized = students.map((s) => {
       return {
         name: s.name || s.Name || "Unknown",
@@ -28,11 +30,11 @@ router.post("/", async (req, res) => {
     });
 
     const marksList = normalized.map((s) => s.marks);
-
-    // Mean
+    const totalMarks = normalized[0]?.totalMarks || 100;
+    
     const mean = marksList.reduce((a, b) => a + b, 0) / marksList.length;
 
-    // Median
+    
     const sorted = [...marksList].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
     const median =
@@ -40,7 +42,7 @@ router.post("/", async (req, res) => {
         ? (sorted[mid] + sorted[mid - 1]) / 2
         : sorted[mid];
 
-    // Mode
+    
     const freq = {};
     marksList.forEach((m) => (freq[m] = (freq[m] || 0) + 1));
     const maxFreq = Math.max(...Object.values(freq));
@@ -48,19 +50,22 @@ router.post("/", async (req, res) => {
       .filter((k) => freq[k] === maxFreq)
       .map(Number);
 
-    // Highest & lowest
+    
     const highest = Math.max(...marksList);
     const lowest = Math.min(...marksList);
 
-    // Standard deviation
+   
     const variance =
       marksList.reduce((a, b) => a + (b - mean) ** 2, 0) / marksList.length;
     const stdDeviation = Math.sqrt(variance);
 
-    const passCount = marksList.filter((m) => m >= 0.3 * highest).length;
-    const failCount = marksList.length - passCount;
+    const passCount = normalized.filter(
+      (s) => s.marks >= 0.3333 * totalMarks
+    ).length;
 
-    // SAVE IN DB
+    const failCount = normalized.length - passCount;
+
+    
     const savedVisualization = await Visualization.create({
       vizName: vizName || "Excel Upload Visualization",
       userName: user.name,
@@ -91,10 +96,11 @@ router.post("/", async (req, res) => {
       stats: savedVisualization.stats,
       studentResults: normalized,
     });
-
   } catch (err) {
     console.error("❌ Error in /upload-excel:", err);
-    return res.status(500).json({ message: "Internal Server Error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
   }
 });
 

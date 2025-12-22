@@ -29,12 +29,12 @@ function ExcelUpload() {
       const workbook = XLSX.read(event.target.result, { type: "buffer" });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const raw = XLSX.utils.sheet_to_json(worksheet);
-
+      
       const formatted = raw.map((s) => ({
         name: s.Name || s.name || "Unknown",
         marks: Number(s.Marks || s.marks || 0),
         subject: s.Subject || s.subject || "N/A",
-        totalMarks: Number(s.TotalMarks || s.totalMarks || 100),
+        totalMarks: Number(s.TotalMarks || s.totalMarks || s.total_marks || s.Total || 100),
         remarks: s.Remarks || s.remarks || "N/A",
       }));
 
@@ -76,16 +76,18 @@ function ExcelUpload() {
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${
+    htmlFor="excel-upload"
+      className={` group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${
         darkMode
           ? "bg-zinc-900 hover:bg-zinc-900/80"
-          : "bg-white hover:bg-gray-50 shadow-sm hover:shadow-md"
+          : "bg-white border border-gray-400 hover:bg-gray-50 shadow-sm hover:shadow-md"
       }`}
     >
       <div
-        className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 group-hover:opacity-30 ${
+        className={`cursor-pointer absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 group-hover:opacity-30 ${
           darkMode ? "bg-emerald-500" : "bg-emerald-400"
         }`}
+        htmlFor="excel-upload"
       ></div>
 
       <div className="relative flex flex-col items-center text-center gap-4">

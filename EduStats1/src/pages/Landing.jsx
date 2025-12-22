@@ -12,7 +12,7 @@ export default function Landing() {
         darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
       }`}
     >
-      {/* NAVBAR */}
+      
       <header
         className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b transition ${
           darkMode
@@ -58,7 +58,7 @@ export default function Landing() {
         </div>
       </header>
 
-      {/* HERO */}
+      
       <section className="mt-60 -translate-y-[10%] pb-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1
@@ -103,7 +103,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FOOTER NOTE */}
+     
       <footer
         className={`text-center text-sm pb-10 ${
           darkMode ? "text-zinc-600" : "text-gray-500"

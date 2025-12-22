@@ -5,6 +5,7 @@ import { useThemeStore } from "../stores/ThemeStore";
 import { useNavigate } from "react-router-dom";
 import ExcelUpload from "../components/UploadFile";
 import WelcomeBack from "../components/WelcomeBack";
+import Carousel from "../components/Carousel";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function Home() {
   const user = useIsLoggedIn((s) => s.user);
 
   useEffect(() => {
+    console.log(import.meta.env.KEY);
     const timer = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
@@ -51,20 +53,20 @@ export default function Home() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-16">
-        {/* Header */}
+        
         <WelcomeBack name={user?.name || "User"} darkMode={darkMode} />
 
-        {/* Grid */}
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Action Cards */}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Track New */}
+            
             <button
               onClick={() => navigate("/home/manual")}
               className={`group relative overflow-hidden rounded-2xl p-8 text-left transition-all duration-300 hover:-translate-y-1 ${
                 darkMode
                   ? "bg-zinc-900 hover:bg-zinc-900/80"
-                  : "bg-white hover:bg-gray-50 shadow-sm hover:shadow-md"
+                  : "bg-white border-1 border-gray-300 hover:bg-gray-50 shadow-sm hover:shadow-md"
               }`}
             >
               <div
@@ -73,9 +75,9 @@ export default function Home() {
                 }`}
               ></div>
 
-              <div className="relative">
+              <div className="relative ">
                 <div
-                  className={`inline-flex p-3 rounded-xl mb-4 ${
+                  className={`inline-flex p-3  rounded-xl mb-4 ${
                     darkMode ? "bg-blue-500/10" : "bg-blue-50"
                   }`}
                 >
@@ -102,16 +104,16 @@ export default function Home() {
               </div>
             </button>
 
-            {/* Upload File */}
+            
             <ExcelUpload />
 
-            {/* View Insights - Full Width */}
+            
             <button
               onClick={() => navigate("/dashboard")}
               className={`group relative overflow-hidden rounded-2xl p-8 text-left sm:col-span-2 transition-all duration-300 hover:-translate-y-1 ${
                 darkMode
                   ? "bg-zinc-900 hover:bg-zinc-900/80"
-                  : "bg-white hover:bg-gray-50 shadow-sm hover:shadow-md"
+                  : "bg-white border-1 border-gray-400  hover:bg-gray-50 shadow-sm hover:shadow-md"
               }`}
             >
               <div
@@ -150,38 +152,13 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Right Column */}
-          <div
-            className={`relative rounded-2xl overflow-hidden ${
-              darkMode ? "bg-zinc-900" : "bg-white shadow-sm"
-            }`}
-          >
-            <div className="h-full min-h-[400px] flex items-center justify-center p-12">
-              <div className="text-center space-y-4">
-                <div
-                  className={`inline-flex p-4 rounded-2xl ${
-                    darkMode ? "bg-zinc-800" : "bg-gray-100"
-                  }`}
-                >
-                  <Sparkles
-                    className={`w-12 h-12 ${
-                      darkMode ? "text-zinc-600" : "text-gray-400"
-                    }`}
-                  />
-                </div>
-                <p
-                  className={`text-lg ${
-                    darkMode ? "text-zinc-500" : "text-gray-500"
-                  }`}
-                >
-                  Your carousel content here
-                </p>
-              </div>
-            </div>
+          
+          <div className="min-h-[400px]">
+            <Carousel darkMode={darkMode} />
           </div>
         </div>
 
-        {/* Quick Stats */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           {[
             { label: "Total Sessions", value: "24", change: randomChange() },

@@ -1,22 +1,23 @@
 import { useThemeStore } from "../stores/ThemeStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import TopThreeLeaderboard from "../components/Leaderboard";
 import ChartsSection from "../components/ChartSection";
 import StatsSummary from "../components/StatsSummary";
 import AiOverview from "../components/AIOverview";
 import { useIsLoggedIn } from "../stores/IsLoggedInStore";
 import { motion } from "framer-motion";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function SavedResultsPage() {
   const isLoggedIn = useIsLoggedIn((s) => s.isLoggedIn);
   const darkMode = useThemeStore((s) => s.darkMode);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
 
@@ -42,6 +43,46 @@ export default function SavedResultsPage() {
     loadSavedViz();
   }, [id]);
 
+  
+  const handleDownload = async () => {
+    const element = document.getElementById("saved-results-export");
+    if (!element) return;
+
+    element.classList.add("export-safe");
+    await new Promise((r) => setTimeout(r, 50));
+
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
+
+    element.classList.remove("export-safe");
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(`${result.vizName || "EduStats_Report"}.pdf`);
+  };
+
+  
   if (loading)
     return (
       <div
@@ -60,18 +101,14 @@ export default function SavedResultsPage() {
   if (!result)
     return (
       <div
-        className={`min-h-screen flex flex-col items-center justify-center text-center px-6 ${
+        className={`min-h-screen flex flex-col items-center justify-center ${
           darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
         }`}
       >
-        <h1 className="text-2xl font-light mb-6">No results found</h1>
+        <h1 className="text-2xl mb-6">No results found</h1>
         <button
           onClick={() => navigate("/dashboard")}
-          className={`px-6 py-3 rounded-xl transition ${
-            darkMode
-              ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
-              : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-          }`}
+          className="px-6 py-3 rounded-xl bg-indigo-500/10 text-indigo-400"
         >
           Go Back
         </button>
@@ -82,68 +119,53 @@ export default function SavedResultsPage() {
 
   return (
     <div
-      className={`min-h-screen pt-24 px-6 transition-colors ${
+      className={`min-h-screen pt-24 px-6 ${
         darkMode ? "bg-zinc-950 text-white" : "bg-gray-50 text-black"
       }`}
     >
+      <button
+            onClick={handleDownload}
+            className="cursor-pointer hover:bg-green-500/60 transition-all duration-500 hover:text-white fixed right-8 top-6 px-4 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400"
+          >
+            Download Full Report
+          </button>
+      {/* NAV */}
       <nav
         className={`fixed top-4 left-1/2 -translate-x-1/2 z-40
-        w-[92%] max-w-4xl rounded-2xl px-6 py-4
-        backdrop-blur-md transition ${
+        w-[92%] max-w-4xl rounded-2xl px-6 py-4 backdrop-blur-md ${
           darkMode
             ? "bg-zinc-900/70 border border-zinc-800"
-            : "bg-white/70 border border-gray-200 shadow-sm"
+            : "bg-white/70 border border-gray-200"
         }`}
       >
-        <div
-          className={`flex justify-center gap-10 text-sm font-medium items-center ${
-            darkMode ? "text-zinc-300" : "text-gray-600"
-          }`}
-        >
-          <a
-            href="#charts-section"
-            className="hover:text-indigo-400 transition"
-          >
-            Charts
-          </a>
-          <a href="#stats-summary" className="hover:text-indigo-400 transition">
-            Stats
-          </a>
-          <a href="#ai-overview" className="hover:text-indigo-400 transition">
-            AI Insights
-          </a>
+        
+        <div className="flex justify-center gap-6 items-center text-sm">
+          <a href="#charts-section" className="hover:text-indigo-400">Charts</a>
+          <a href="#stats-summary" className="hover:text-indigo-400">Stats</a>
+          <a href="#ai-overview" className="hover:text-indigo-400">AI Insights</a>
 
-          {/* NEW */}
           <button
             onClick={() => setShowLeaderboard(true)}
-            className={`px-4 py-1.5 rounded-lg font-medium transition ${
-              darkMode
-                ? "bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
-                : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-            }`}
+            className="px-4 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-400"
           >
             Leaderboard
           </button>
+
+          
         </div>
       </nav>
-      {/* HEADER */}
-      <div className="max-w-5xl mx-auto text-center mb-14">
-        <p
-          className={`text-3xl font-light mb-1 ${
-            darkMode ? "text-white" : "text-black"
-          }`}
-        >
-          {vizName}
-        </p>
-        <p
-          className={`text-lg ${darkMode ? "text-zinc-500" : "text-gray-500"}`}
-        >
+
+      <div className="text-center mb-14">
+        <p className="text-3xl font-light">{vizName}</p>
+        <p className="text-zinc-500">
           Total Students · {studentResults.length}
         </p>
       </div>
 
-      {/* CONTENT */}
-      <div className="max-w-7xl mx-auto flex flex-col gap-10">
+      <div
+        id="saved-results-export"
+        className="max-w-7xl mx-auto flex flex-col gap-10"
+      >
         <section id="charts-section">
           <ChartsSection
             studentResults={studentResults}
@@ -165,44 +187,39 @@ export default function SavedResultsPage() {
         </section>
       </div>
 
-      {/* FOOTER */}
-      <div className="mt-14 mb-10 text-center">
+      
+      <div className="mt-14 text-center">
         <button
           onClick={() => navigate(-1)}
-          className={`px-8 py-3 rounded-xl font-medium transition ${
-            darkMode
-              ? "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
+          className="px-8 py-3 rounded-xl bg-zinc-800 text-zinc-300"
         >
           ← Go Back
         </button>
       </div>
-      {showLeaderboard && (
-        <motion.div initial={{opacity:0,y:100}} animate={{opacity:1,y:0}} transition={{ease:"easeInOut"}} exit={{opacity:0,y:-100}} className="fixed inset-0 z-50  flex items-center justify-center">
-          {/* BACKDROP */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setShowLeaderboard(false)}
-          ></div>
 
-          {/* MODAL */}
+      {showLeaderboard && (
+        <motion.div
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+        >
           <div
-            className={`relative w-[92%] max-w-4xl rounded-3xl p-6 ${
-              darkMode
-                ? "bg-zinc-900 border border-zinc-800"
-                : "bg-white border border-gray-200 shadow-xl"
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowLeaderboard(false)}
+          />
+
+          <div
+            className={`relative w-[92%] max-w-4xl p-6 rounded-3xl ${
+              darkMode ? "bg-zinc-900" : "bg-white"
             }`}
           >
-            {/* CLOSE */}
             <button
               onClick={() => setShowLeaderboard(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-zinc-800 hover:text-white transition"
+              className="absolute top-4 right-4"
             >
-              <X className={darkMode ? "text-white" : "text-black"} />
+              <X />
             </button>
 
-            {/* CONTENT */}
             <TopThreeLeaderboard
               studentResults={studentResults}
               darkMode={darkMode}

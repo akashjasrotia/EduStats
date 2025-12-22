@@ -34,7 +34,7 @@ export default function WelcomeBack({ name = "User", darkMode }) {
           }`}
         >
           {typedName}
-          <span className="animate-pulse">|</span>
+          <span className="ml-2 animate-pulse">|</span>
         </span>
       </h1>
 

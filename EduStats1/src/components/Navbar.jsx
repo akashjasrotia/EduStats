@@ -89,7 +89,7 @@ export default function Sidebar() {
         ${darkMode ? "bg-zinc-900" : "bg-white"}
       `}
     >
-      {/* LOGO */}
+      
       <div className="flex items-center gap-3 px-4 py-4">
         <Menu
           size={26}
@@ -107,7 +107,7 @@ export default function Sidebar() {
         </span>
       </div>
 
-      {/* NAV */}
+      
       <nav className="flex flex-col gap-1 px-2 mt-2">
         {navItems.map((item, i) => (
           <NavLink key={i} to={item.to} className={getNavLinkClass}>
@@ -117,7 +117,7 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* BOTTOM */}
+      
       <div className="mt-auto flex flex-col gap-2 px-2 pb-6">
         {!isLoggedIn ? (
           <>
@@ -148,7 +148,7 @@ export default function Sidebar() {
           </button>
         )}
 
-        {/* THEME TOGGLE */}
+        
         <button
           onClick={toggleDarkMode}
           className={`${navBase} ${

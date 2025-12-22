@@ -6,7 +6,7 @@ router.post("/", async (req, res) => {
   try {
     const { vizName, students, user } = req.body;
 
-    // Validate input
+    
     if (!vizName || !students || !Array.isArray(students)) {
       return res.status(400).json({ message: "Invalid request format" });
     }
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "User info missing!" });
     }
 
-    // Convert missing values to defaults
+    
     const normalized = students.map((s) => ({
       name: s.name || "Unknown",
       subject: s.subject || "N/A",
@@ -29,10 +29,10 @@ router.post("/", async (req, res) => {
 
     const marksList = normalized.map((s) => Number(s.marks));
 
-    // Mean
+    
     const mean = marksList.reduce((a, b) => a + b, 0) / marksList.length;
 
-    // Median
+    
     const sorted = [...marksList].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
     const median =
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
         ? (sorted[mid] + sorted[mid - 1]) / 2
         : sorted[mid];
 
-    // Mode
+  
     const freq = {};
     marksList.forEach((m) => (freq[m] = (freq[m] || 0) + 1));
     const maxFreq = Math.max(...Object.values(freq));
@@ -48,20 +48,20 @@ router.post("/", async (req, res) => {
       .filter((k) => freq[k] == maxFreq)
       .map(Number);
 
-    // Highest & Lowest
+    
     const highest = Math.max(...marksList);
     const lowest = Math.min(...marksList);
 
-    // Standard deviation
+    
     const variance =
       marksList.reduce((a, b) => a + (b - mean) ** 2, 0) / marksList.length;
     const stdDeviation = Math.sqrt(variance);
 
-    // Pass/Fail
+    
     const passCount = marksList.filter((m) => m >= 33).length;
     const failCount = marksList.length - passCount;
 
-    // Save in MongoDB
+    
     const savedVisualization = await Visualization.create({
       vizName,
       userName: user.name,
@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
       createdAt: new Date(),
     });
 
-    // Send response to frontend
+    
     return res.status(200).json({
       success: true,
       message: "Manual visualization saved successfully",
