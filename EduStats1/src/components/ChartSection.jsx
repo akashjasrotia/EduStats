@@ -108,7 +108,7 @@ export default function ChartSection({ studentResults, stats, darkMode }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* BAR CHART */}
+      
       <div className={`${cardClass} h-[320px]`}>
         <h3
           className={`text-lg font-medium mb-4 ${
@@ -120,7 +120,7 @@ export default function ChartSection({ studentResults, stats, darkMode }) {
         <Bar data={barData} options={chartOptions} />
       </div>
 
-      {/* LINE CHART */}
+      
       <div className={`${cardClass} h-[320px]`}>
         <h3
           className={`text-lg font-medium mb-4 ${
@@ -132,7 +132,7 @@ export default function ChartSection({ studentResults, stats, darkMode }) {
         <Line data={lineData} options={chartOptions} />
       </div>
 
-      {/* TOGGLE MORE CHARTS */}
+      
       <button
         onClick={() => setMoreChartsVisible((p) => !p)}
         className={`self-center px-6 py-2 rounded-xl font-medium transition ${
@@ -144,7 +144,7 @@ export default function ChartSection({ studentResults, stats, darkMode }) {
         {moreChartsVisible ? "Hide More Charts" : "Show More Charts"}
       </button>
 
-      {/* MORE CHARTS */}
+      
       {moreChartsVisible && (
         <MoreChartsSection
           studentResults={studentResults}

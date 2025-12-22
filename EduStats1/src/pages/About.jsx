@@ -16,7 +16,7 @@ export default function About() {
         darkMode ? "bg-zinc-950" : "bg-gray-50"
       }`}
     >
-      {/* HERO */}
+      
       <section className="text-center max-w-4xl mx-auto mb-24">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -42,7 +42,7 @@ export default function About() {
         </motion.p>
       </section>
 
-      {/* MISSION */}
+      
       <section className="max-w-4xl mx-auto mb-24">
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
@@ -74,7 +74,7 @@ export default function About() {
         </motion.div>
       </section>
 
-      {/* FEATURES */}
+      
       <section className="max-w-7xl mx-auto mb-28">
         <h2
           className={`text-3xl font-light text-center mb-14 ${
@@ -145,7 +145,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* JOURNEY */}
+      
       <section className="max-w-5xl mx-auto mb-28">
         <h2
           className={`text-3xl font-light text-center mb-14 ${
@@ -199,7 +199,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA */}
+      
       <section className="text-center max-w-3xl mx-auto">
         <h2
           className={`text-2xl font-medium mb-4 ${

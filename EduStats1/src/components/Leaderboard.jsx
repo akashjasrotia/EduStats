@@ -54,7 +54,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
         transition-all duration-300
       `}
     >
-      {/* HEADER */}
+      
       <div className="text-center mb-16">
         <h2
           className={`text-5xl font-bold tracking-tight mb-3 ${
@@ -68,7 +68,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
         <div className={`w-16 h-1 mx-auto ${darkMode ? "bg-indigo-500" : "bg-indigo-600"}`}></div>
       </div>
 
-      {/* PODIUM */}
+      
       <div className="flex justify-center items-end gap-6 sm:gap-8 lg:gap-16 pb-8">
         {positions.map((pos) => {
           const student = displayOrder[pos.index];
@@ -81,12 +81,12 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
                 isFirst ? "z-10 scale-105" : "z-0"
               }`}
             >
-              {/* Crown */}
+              
               {isFirst && (
                 <div className="absolute -top-12 text-4xl">👑</div>
               )}
 
-              {/* Avatar */}
+              
               <div
                 className={`
                   w-16 h-16 rounded-full mb-[-1.5rem] z-20
@@ -98,7 +98,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
                 {student.name.charAt(0)}
               </div>
 
-              {/* Podium Block */}
+              
               <div
                 className={`
                   ${pos.size} flex flex-col items-center justify-end pb-5 rounded-t-2xl
@@ -106,7 +106,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
                   transition-all duration-300 hover:scale-105
                 `}
               >
-                {/* Score Badge */}
+                
                 <div className={`
                   mb-3 px-4 py-1.5 rounded-full text-base font-semibold
                   ${darkMode ? "bg-black/20 text-white" : "bg-white/60 text-gray-900"}
@@ -114,7 +114,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
                   {student.score}%
                 </div>
 
-                {/* Name Tag */}
+                
                 <div className={`
                   w-[85%] text-center text-sm font-medium truncate py-2.5 rounded-lg
                   ${darkMode ? "bg-zinc-900 text-white" : "bg-white text-gray-900 shadow-sm"}
@@ -123,7 +123,7 @@ export default function TopThreeLeaderboard({ studentResults = [], darkMode }) {
                 </div>
               </div>
 
-              {/* Position Label */}
+              
               <div className={`mt-4 text-sm font-semibold ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                 {pos.label}
               </div>

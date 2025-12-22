@@ -98,7 +98,7 @@ export default function ManualEntry() {
       }`}
     >
       {!students.length ? (
-        /* INITIAL CARD */
+        
         <div
           className={`w-full max-w-xl rounded-2xl p-10 ${
             darkMode
@@ -148,7 +148,7 @@ export default function ManualEntry() {
           </button>
         </div>
       ) : (
-        /* FORM */
+        
         <form
           onSubmit={handleSubmit}
           className={`w-full max-w-6xl rounded-2xl p-10 ${

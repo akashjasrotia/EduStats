@@ -62,7 +62,7 @@ export default function Dashboard() {
         darkMode ? "bg-zinc-950" : "bg-gray-50"
       }`}
     >
-      {/* HEADER */}
+      
       <div className="max-w-7xl mx-auto mb-14">
         <h1
           className={`text-4xl font-light tracking-tight mb-2 ${
@@ -80,7 +80,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* CONTENT */}
+      
       {loading ? (
         <div className="flex justify-center items-center min-h-[300px]">
           <Loader2

@@ -4,6 +4,17 @@
 body{
   background-color: #020617;
 }
+
+.export-safe * {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #dddddd !important;
+}
+
+.export-safe canvas {
+  background-color: transparent !important;
+}
+
 *{
   font-family: 'poppins', sans-serif;
 }

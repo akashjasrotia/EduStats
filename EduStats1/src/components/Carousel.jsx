@@ -1,103 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Circle } from 'lucide-react';
-import c1 from '../assets/Carousel1.png';
-import c2 from '../assets/Carousel2.png';
-import c3 from '../assets/Carousel3.png';
-import c4 from '../assets/Carousel4.png';
-import c5 from '../assets/Carousel5.png';
-import c6 from '../assets/Carousel6.png';
-const slides = [
+import { useEffect, useState } from "react";
+
+const images = [
   {
-    url: c6,
-    alt: 'Slide 1'
+    src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+    title: "Visualize Performance",
+    subtitle: "Clean charts and real insights",
   },
   {
-    url: c3,
-    alt: 'Slide 2'
+    src: "https://images.unsplash.com/photo-1581090700227-1e37b190418e",
+    
+    title: "Track Progress",
+    subtitle: "Monitor student growth effortlessly",
   },
   {
-    url: c2,
-    alt: 'Slide 3'
-  },
-  {
-    url: c4,
-    alt: 'Slide 4'
+    src: "https://images.unsplash.com/photo-1531482615713-2afd69097998",
+    title: "Smart Analytics",
+    subtitle: "Make data-driven decisions",
   },
 ];
 
-
-export default function App() {
-  const [current, setCurrent] = useState(0);
-  
-
-  const autoSlideInterval = 3000;
-
-  const prev = () =>
-    setCurrent((curr) => (curr === 0 ? slides.length - 1 : curr - 1));
-
-  const next = () =>
-    setCurrent((curr) => (curr === slides.length - 1 ? 0 : curr + 1));
-
-  const goToSlide = (index) => {
-    setCurrent(index);
-  };
-
+export default function Carousel({ darkMode = false }) {
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const slideInterval = setInterval(next, autoSlideInterval);
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 3500);
 
-    return () => clearInterval(slideInterval); 
-  }, [current]);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
+    <div className={`relative w-full h-full rounded-lg overflow-hidden ${
+      darkMode ? "bg-zinc-900" : "bg-zinc-700"
+    }`}>
+      {images.map((img, i) => (
+        <div
+          key={i}
+          className={`
+            absolute inset-0 transition-opacity duration-1000 ease-in-out
+            ${i === index ? "opacity-100" : "opacity-0"}
+          `}
+        >
+          <img
+            src={img.src}
+            alt={img.title}
+            className="w-full h-full object-cover opacity-60"
+          />
 
-        <div className="overflow-hidden relative rounded-2xl shadow-2xl">
+          
+          <div className={`absolute inset-0 ${
+            darkMode 
+              ? 'bg-gradient-to-t from-zinc-900/90 to-zinc-900/20 ' 
+              : 'bg-gradient-to-t from-zinc/70 to-zinc/10 '
+          }`} />
 
-          <div
-            className="flex transition-transform ease-out duration-500"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-            {slides.map((slide, index) => (
-              <img
-                key={index}
-                src={slide.url}
-                alt={slide.alt}
-                className="w-full object-cover shrink-0 aspect-square" 
-              />
-            ))}
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="absolute inset-0 flex items-center justify-between p-4">
-            <button
-              onClick={prev}
-              className="p-2 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white transition"
-            >
-              <ChevronLeft size={28} />
-            </button>
-            <button
-              onClick={next}
-              className="p-2 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white transition"
-            >
-              <ChevronRight size={28} />
-            </button>
-          </div>
-
-          {/* Bottom Navigation Dots */}
-          <div className="absolute bottom-4 right-0 left-0">
-            <div className="flex items-center justify-center gap-2">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goToSlide(i)}
-                  className={`
-                    transition-all w-3 h-3 bg-white rounded-full
-                    ${current === i ? "p-2" : "bg-opacity-50"}
-                  `}
-                />
-              ))}
-            </div>
+          
+          <div className="absolute bottom-6 left-6 right-6">
+            <h3 className={`text-xl font-light tracking-wide mb-1 ${
+              darkMode ? 'text-zinc-100' : 'text-zinc-200'
+            }`}>
+              {img.title}
+            </h3>
+            <p className={`text-xs font-light ${
+              darkMode ? 'text-zinc-400' : 'text-zinc-200'
+            }`}>
+              {img.subtitle}
+            </p>
           </div>
         </div>
+      ))}
+
+      
+      <div className="absolute bottom-6 right-6 flex gap-1.5">
+        {images.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 w-1 rounded-full transition-all duration-300 ${
+              i === index 
+                ? darkMode ? 'bg-zinc-100 w-4' : 'bg-zinc-900 w-4'
+                : darkMode ? 'bg-zinc-600' : 'bg-zinc-400'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
